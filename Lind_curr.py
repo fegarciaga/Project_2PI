@@ -102,6 +102,7 @@ def Integrate(N, hx, J, bath_params, tlist, T, spin):
     Js = Build_currents(N, sx_list, sy_list)
     JXXZ = Build_XXZ_currents(N, sx_list, sy_list, sz_list)
     JB = Build_Bcurrents(N, sx_list, sy_list, hx)
+    Jz = Build_currents(N, sz_list, sy_list)
     
     Evals, Ekets = H.eigenstates()
 
@@ -132,6 +133,7 @@ def Integrate(N, hx, J, bath_params, tlist, T, spin):
     sz_list.extend(Js)
     sz_list.extend(JXXZ)
     sz_list.extend(JB)
+    sz_list.extend(Jz)
 
     options = Options(store_states = False)
     result = mesolve(H, psi_init, tlist, c_list, sz_list, options=options)
@@ -155,4 +157,4 @@ tlist = np.linspace(0,100,2000)
 for i in range(100):
     bath_params[0]= al[i]
     data = Integrate(N, h, J, bath_params, tlist, T, spin)
-    np.savetxt(f"results/D_N_{N}_h_{h}_J_{J}_al_{bath_params[0]}_Wc_{bath_params[1]}.txt", data)
+    np.savetxt(f"LindbladResults/D_N_{N}_h_{h}_J_{J}_al_{bath_params[0]:.2f}_Wc_{bath_params[1]}.txt", data)
